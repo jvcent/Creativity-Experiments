@@ -6,15 +6,28 @@ let nextId = 0;
 const Absent = () => {
   const [input, setInput] = useState(""); // store currently inputted idea in input form
   const [ideas, setIdeas] = useState([]); // previously entered ideas
+  const [ideaEditing, setIdeaEditing] = useState(null); // id of idea we are editing
+  const [editingText, setEditingText] = useState("");
 
-  // const handleChange = e => { // e is short for event
-  //     setInput(e.target.value);
-  // }
+  const handleSubmit = (e) => { // e is short for event
+      e.preventDefault(); // prevents page from refreshing upon clicking submit
+      setIdeas([...ideas, { id: nextId++, name: input }]);
+      setInput(''); // clears the input form
+  }
 
-  // const handleSubmit = e => { // e is short for event
-  //     e.preventDefault(); // prevents page from refreshing upon clicking submit
-  //     setInput(''); // clears the input form
-  // }
+  function editIdea(id) {
+    const updatedIdeas = [...ideas].map((idea) => {
+      if (idea.id === id) {
+        idea.name = editingText;
+      }
+      return idea;
+    })
+    setIdeas(updatedIdeas);
+
+    // reset editing hooks
+    setIdeaEditing(null);
+    setEditingText("");
+  }
 
   return (
     <div className="h-screen w-screen items-center justify-center flex text-3xl font-semibold space-y-8 p-14 bg-amber-400">
@@ -39,8 +52,75 @@ const Absent = () => {
                 <h1 className="mt-4 text-center">{Object.keys(prompts)[0]}</h1>
             </div>
 
-          <div className="w-1/2">
-            <h2 className="mb-4 text-3xl">Enter Alternative Uses below</h2>
+          <div className="w-1/2 h-full flex flex-col space-y-4">
+            <form onSubmit={handleSubmit}>
+                <h2 className="mb-4 text-3xl">Enter Alternative Uses below</h2>
+                <div className="flex flex-row justify-between space-x-4">
+                  <input 
+                    type="text" 
+                    value={input}
+                    className="grow p-2"
+                    onChange={(e) => setInput(e.target.value)}
+                  />
+                  <input type="submit" value="SUBMIT" className="outline outline-offset-2 outline-2 rounded-md font-bold text-xl px-2 hover:bg-orange-500"/>
+                </div>
+            </form>
+
+            <div className="flex flex-col items-center w-full h-96 bg-orange-500 p-3 rounded-lg">
+              <ul className="flex flex-col items-center w-full h-full overflow-hidden overflow-y-auto">
+                  {ideas.map((idea) => (
+                    <li
+                      key={idea.id}
+                      className="text-left text-xl flex flex-col w-full px-12 space-y-1"
+                    >
+                      <div className="flex flex-row w-full justify-between items-center justify-center">
+                        <div className="w-full">
+                          {ideaEditing === idea.id ? 
+                          (
+                            <form onSubmit={() => editIdea(idea.id)} className="flex flex-row">
+                            <input
+                              type="text"
+                              value={editingText}
+                              className="w-3/4 p-2 outline outline-1"
+                              onChange={(e) => setEditingText(e.target.value)}
+                            />
+                            <input input type="submit" value="✔️" />
+                            </form>
+                          ) 
+                          : 
+                          (
+                            <span className="whitespace-normal max-w-3/4">{`${idea.name}`}</span>
+                          )}
+                        </div>
+
+                        <div className="flex justify-center">
+                          <button 
+                            onClick={() => {
+                              setIdeaEditing(idea.id)
+                              setEditingText(idea.name)
+                            }}
+                          >
+                            ✏️
+                          </button>
+
+                          <button
+                            onClick={() => {
+                              setIdeas(ideas.filter((a) => a.id !== idea.id));
+                            }}
+                          >
+                            ❌
+                          </button>
+                        </div>
+                      </div>
+
+                      
+                    
+                      
+                    </li>
+                  ))}
+                </ul>
+            </div>
+            {/* <h2 className="mb-4 text-3xl">Enter Alternative Uses below</h2>
 
             <div className="flex flex-row space-x-4 justify-between">
               <input
@@ -57,9 +137,9 @@ const Absent = () => {
               >
                 SUBMIT
               </button>
-            </div>
+            </div> */}
 
-            <div className="h-3/4 bg-orange-500 mt-4 rounded-lg p-4 grid place-items-start">
+            {/* <div className="h-3/4 bg-orange-500 mt-4 rounded-lg p-4 grid place-items-start">
               <ul className="object-left flex flex-wrap">
                 {ideas.map((idea) => (
                   <li
@@ -77,7 +157,7 @@ const Absent = () => {
                   </li>
                 ))}
               </ul>
-            </div>
+            </div> */}
           </div>
         </div>
       </div>

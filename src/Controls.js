@@ -25,9 +25,9 @@ const Controls = () => {
     <div className="flex flex-col items-center justify-center rounded-2xl p-24 bg-amber-500">
       <h1 className="mb-8">ALTERNATIVE USES TASK</h1>
       <div className="flex flex-row flex-wrap space-x-4 items-center justify-center">
-        <button onClick={handleAbsentClick} className="outline outline-4 w-48 h-16 rounded-full hover:bg-orange-500">ABSENT</button>
-        <button onClick={handleGenerateClick} className="outline outline-4 w-48 h-16 rounded-full hover:bg-orange-500">GENERATE</button>
-        <button onClick={handleRefineClick} className="outline outline-4 w-48 h-16 rounded-full hover:bg-orange-500">REFINE</button>
+        <button onClick={handleAbsentClick} className="outline outline-4 w-48 h-16 rounded-lg hover:bg-orange-500">ABSENT</button>
+        <button onClick={handleGenerateClick} className="outline outline-4 w-48 h-16 rounded-lg hover:bg-orange-500">GENERATE</button>
+        <button onClick={handleRefineClick} className="outline outline-4 w-48 h-16 rounded-lg hover:bg-orange-500">REFINE</button>
       </div>
     </div>
   </div>
