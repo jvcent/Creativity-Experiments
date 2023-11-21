@@ -1,5 +1,5 @@
 import React from "react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { prompts } from "./Prompts";
 
 let nextId = 0;
@@ -30,6 +30,22 @@ const Generate = () => {
         setEditingText("");
     }
 
+    const [time, setTime] = useState(300);
+
+    useEffect(() => {
+        let timer = setInterval(() => {
+        setTime((time) => {
+            if (time === 0) {
+            clearInterval(timer);
+            return 0;
+            } else return time - 1;
+        });
+        }, 1000);
+
+        // Cleanup the interval on component unmount or when time reaches 0
+        return () => clearInterval(timer);
+    }, [time]);
+
     return (
         <div className="h-screen w-screen items-center justify-center flex text-3xl font-semibold space-y-8 p-8 bg-amber-400">
             <div className="flex flex-row space-x-4 p-4 h-full w-full items-center justify-center rounded-[60px]">
@@ -52,7 +68,14 @@ const Generate = () => {
                 <div className="w-1/3 rounded-[60px] bg-orange-500 flex flex-col items-center h-full px-4">
                     
                     <form onSubmit={handleSubmit} className="w-full">
-                        <h2 className="mb-4 text-2xl text-center mt-8">Enter Alternative Uses below</h2>
+                        <div className="flex flex-row justify-between items-center mt-8 mb-4 px-3">
+                            <h2 className="text-2xl text-center">Enter Alternative Uses below</h2>
+                            <p className="w-fit bg-orange-400 rounded-lg text-xl p-1">
+                            Time: {`${Math.floor(time / 60)}`.padStart(2, 0)}:
+                            {`${time % 60}`.padStart(2, 0)}
+                            </p>
+                        </div>
+                        
                         <div className="flex flex-row space-x-4 justify-between">
                             <input 
                                 type="text" 

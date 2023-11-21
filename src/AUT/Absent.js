@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { prompts } from "./Prompts";
 
 let nextId = 0;
@@ -29,6 +29,22 @@ const Absent = () => {
     setEditingText("");
   }
 
+  const [time, setTime] = useState(300);
+
+  useEffect(() => {
+    let timer = setInterval(() => {
+      setTime((time) => {
+        if (time === 0) {
+          clearInterval(timer);
+          return 0;
+        } else return time - 1;
+      });
+    }, 1000);
+
+    // Cleanup the interval on component unmount or when time reaches 0
+    return () => clearInterval(timer);
+  }, [time]);
+
   return (
     <div className="h-screen w-screen items-center justify-center flex text-3xl font-semibold space-y-8 p-14 bg-amber-400">
       <div className="flex flex-col h-full w-full items-center justify-center bg-amber-500 rounded-[60px]">
@@ -53,6 +69,12 @@ const Absent = () => {
             </div>
 
           <div className="w-1/2 h-full flex flex-col space-y-4">
+
+            <p className="w-fit bg-orange-500 rounded-lg p-2 text-2xl">
+              Time: {`${Math.floor(time / 60)}`.padStart(2, 0)}:
+              {`${time % 60}`.padStart(2, 0)}
+            </p>
+
             <form onSubmit={handleSubmit}>
                 <h2 className="mb-4 text-3xl">Enter Alternative Uses below</h2>
                 <div className="flex flex-row justify-between space-x-4">
