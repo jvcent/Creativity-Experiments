@@ -1,10 +1,12 @@
 import React from "react";
 import { useState, useEffect } from "react";
 import { prompts } from "./Prompts";
+import { OpenAI } from "langchain/llms/openai";
 
 let nextId = 0;
 
 const Refine = () => {
+    
     const [input, setInput] = useState(""); // store currently inputted idea in input form
     const [ideas, setIdeas] = useState([]); // previously entered ideas
     const [ideaEditing, setIdeaEditing] = useState(null); // id of idea we are editing
@@ -45,6 +47,18 @@ const Refine = () => {
         // Cleanup the interval on component unmount or when time reaches 0
         return () => clearInterval(timer);
     }, [time]);
+
+    // const model = new OpenAI({
+    //     temperature: 0.9,
+    //     azureOpenAIApiKey: "ec79f9fb01954ecbaf4f727ff65ede2f",
+    //     azureOpenAIApiVersion: "YOUR-API-VERSION",
+    //     azureOpenAIApiInstanceName: "quickta-playground",
+    //     azureOpenAIApiDeploymentName: "GPT3_16k",
+    //   });
+
+    // const res = await model.call(
+    //     "Give feedback on how feasible {item} would be at being an alternative use to a {prompt} "
+    // );
 
     return (
         <div className="h-screen w-screen items-center justify-center flex text-3xl font-semibold space-y-8 p-8 bg-amber-400">
